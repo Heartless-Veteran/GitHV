@@ -111,7 +111,7 @@ export default function CodeSnippets({ onInsertSnippet }: CodeSnippetsProps) {
         title: "Copied to clipboard",
         description: "Code snippet has been copied to your clipboard"
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Failed to copy",
         description: "Could not copy to clipboard",

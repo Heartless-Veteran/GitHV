@@ -1,24 +1,22 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type ChangeEvent, type KeyboardEvent } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Bot, Code, FileText, TestTube, RefreshCw, Lightbulb,
-  Zap, MessageSquare, Settings, Check, X, Play,
-  GitBranch, Bug, Sparkles, Brain, Target, Plus
+  Zap, MessageSquare, Play,
+  GitBranch, Bug, Brain, Plus
 } from "lucide-react";
 
 interface CopilotAssistantProps {
   code: string;
   language: string;
   fileName?: string;
-  onCodeChange: (code: string) => void;
   onInsertCode: (code: string, position?: number) => void;
 }
 
@@ -37,15 +35,12 @@ export default function CopilotAssistant({
   code, 
   language, 
   fileName, 
-  onCodeChange, 
   onInsertCode 
 }: CopilotAssistantProps) {
   const [activeTab, setActiveTab] = useState("suggestions");
   const [chatInput, setChatInput] = useState("");
   const [chatHistory, setChatHistory] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [selectedText, setSelectedText] = useState("");
-  const [cursorPosition, setCursorPosition] = useState(0);
   const [analysis, setAnalysis] = useState<any>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -55,9 +50,7 @@ export default function CopilotAssistant({
       const response = await apiRequest("POST", "/api/ai/code-suggestions", {
         code,
         language,
-        fileName,
-        cursorPosition,
-        selectedText
+        fileName
       });
       return response;
     },
@@ -290,10 +283,10 @@ export default function CopilotAssistant({
             <div className="flex space-x-2">
               <Textarea
                 value={chatInput}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setChatInput(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setChatInput(e.target.value)}
                 placeholder="Ask about the code..."
                 className="flex-1 min-h-[60px] resize-none"
-                onKeyPress={(e: React.KeyboardEvent) => {
+                onKeyPress={(e: KeyboardEvent) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleChatSubmit();

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,8 +15,8 @@ import {
 import {
   Folder, FolderOpen, File, Search, Plus, RefreshCw,
   FileText, FileCode, Image, Archive, Settings,
-  ChevronRight, ChevronDown, MoreHorizontal, Copy,
-  Trash2, Edit, Download
+  ChevronRight, ChevronDown, Copy,
+  Trash2, Edit
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Repository, File as FileType } from '@shared/schema';
